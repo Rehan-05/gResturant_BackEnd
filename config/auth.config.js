@@ -6,5 +6,4 @@ SMTP_PASSWORD:'RehanGoraya123!?',
 SMPT_PORT:'3000',
 SMTP_HOST:'smtp.gmail.com',
 BASE_URL : "http://localhost:3000",
-
 }
