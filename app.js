@@ -55,7 +55,7 @@ app.use(cors(corsOptions));
 const db = require("./model");
 
 // Mongo CONNECTION
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/ProjectVotcen";
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/gResturant";
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
