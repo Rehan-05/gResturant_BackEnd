@@ -3,7 +3,7 @@
 const nodemailer = require("nodemailer");
 // var xoauth2 = require('xoauth2');
 // const {v4:uuidv4} = require('uuid');
-// const currentURL = "http://localhost:3000";
+// const currentURL = "http://localhost:3003";
 // const sendMail = require('../util/sendEmail') ;
 
 

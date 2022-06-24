@@ -17,6 +17,8 @@ module.exports = function(app) {
 
   app.post("/api/auth/signin", controllerAuth.signin);
 
+  app.post("/api/auth/googleSignIn",controllerAuth.googleSignIn);
+
   app.post("/api/addRestaurant",controllerRestaurant.addRestaurant);
 
   app.get("/api/getRestaurants",controllerRestaurant.getRestaurants);

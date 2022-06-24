@@ -1,15 +1,16 @@
 const config = require("../config/auth.config");
 const db = require("../model");
 const {User} = db.user;
-
+const {OAuth2Client} =  require("google-auth-library")
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { response } = require("express");
 // const crypto = require('crypto')
 // var sendResentEmail = require('../middlewares/sendResentEmail');
 // var send_NotificationEmail= require('../middlewares/send_NotificationEmail');
 
-
+const client = new OAuth2Client(config.CLIENT_ID);
 
 exports.signup = (req, res) => {
   const user = new User({
@@ -78,3 +79,53 @@ exports.signin = (req, res) => {
       });
     });
 };
+
+//google login token save in database
+exports.googleSignIn = (req, res) => {
+  const {tokenId} = req.body;
+  
+  client.verifyIdToken({idToken:tokenId, audience: config.CLIENT_ID}).then((ticket) => {
+    const {email_verified, name, email} = ticket.payload;
+    if(email_verified)
+    {
+      User.findOne({email}).exec((err,user)=>{
+        if(err)
+        {
+          return res.status(400).json({
+            error:"something went wrong..."
+          })
+        }
+        else{
+          if(user)
+          {
+            var token = jwt.sign({ id: user.id }, config.secret);
+            const {_id,name,email} = user;
+            res.json({
+              token,
+              user:{_id,name,email}
+            })
+          }else{
+             let password = email+config.secret;
+             let newUser = new User({name,email,password});
+             newUser.save((err,data)=>{
+              if(err){
+                return res.status(400).json({
+                  error: "Something went wrong"
+                })
+              }
+              var token = jwt.sign({ id: data.id }, config.secret);
+              const {_id,name,email} = newUser;
+              res.json({
+                token,
+                user:{_id,name,email}
+              })
+             })
+
+          }
+        }
+      })
+    }
+  }).catch(err => {
+      console.log(err)
+  })
+}

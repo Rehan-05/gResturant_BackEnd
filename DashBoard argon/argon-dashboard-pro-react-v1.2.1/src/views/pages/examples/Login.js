@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, {useEffect} from "react";
+import React from "react";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -37,6 +37,7 @@ import {
 import AuthHeader from "components/Headers/AuthHeader.js";
 import { GoogleLogin } from 'react-google-login';
 import { gapi } from "gapi-script";
+import axios  from "axios";
 
 function Login() {
   const [focusedEmail, setfocusedEmail] = React.useState(false);
@@ -44,7 +45,31 @@ function Login() {
   
   const responseSucsessGoogle = (response) => {
     console.log("Data successfully load on the google api",response);
-    alert("User successfully login");
+    axios({
+      method: "POST",
+      url: "http://localhost:3003/api/auth/googleSignIn",
+      data: { tokenId:response.tokenId },
+    }).then((res) => {
+      console.log("Data successfully load on the google api",res);
+      alert("User successfully login & added into DB");
+    }
+    ).catch((err) => {
+      if(err.status === 401){
+        console.log("User not found",err);
+      }
+      else if(err.status === 500){  
+        console.log("Internal server error",err);
+      }
+      else if(err.status === 400){
+        console.log("Bad request",err);
+      }
+      else if(err.status === 404){
+        console.log("Not nice",err);
+      }else if(err.status === 403){
+        console.log("Forbidden",err);
+      }
+    }
+    );
   }
 
   const responseErrorGoogle = (response) => {

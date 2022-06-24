@@ -28,7 +28,7 @@ const options = {
 
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:3003",
         description: "Votcen Api's",
       },
     ],
@@ -45,7 +45,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 const cors = require("cors");
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "*",
   credentials:true,            //access-control-allow-credentials:true
   optionSuccessStatus:200
 };
