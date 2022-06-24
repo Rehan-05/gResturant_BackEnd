@@ -14,9 +14,7 @@ const UserSchema=new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    trim: true,
-    lowercase: true,
-    minlength: [3, "Email must be at least 3 characters long"],
+    minlength: [5, "Email must be at least 3 characters long"],
     maxlength: [50, "Email must be at most 50 characters long"],
     // validate: [validate.email, "Please enter a valid email"],
     validate: {
@@ -27,11 +25,9 @@ const UserSchema=new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-    minlength: [3, "Password must be at least 3 characters long"],
-    maxlength: [50, "Password must be at most 50 characters long"],
+    // required: true,
+    // minlength: [3, "Password must be at least 3 characters long"],
+    // maxlength: [50, "Password must be at most 50 characters long"],
   },
 })
 
