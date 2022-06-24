@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useEffect} from "react";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -36,19 +36,28 @@ import {
 // core components
 import AuthHeader from "components/Headers/AuthHeader.js";
 import { GoogleLogin } from 'react-google-login';
+import { gapi } from "gapi-script";
 
 function Login() {
   const [focusedEmail, setfocusedEmail] = React.useState(false);
   const [focusedPassword, setfocusedPassword] = React.useState(false);
   
   const responseSucsessGoogle = (response) => {
-    console.log(response);
+    console.log("Data successfully load on the google api",response);
+    alert("User successfully login");
   }
 
   const responseErrorGoogle = (response) => {
-    console.log(response);
+    console.log("Here is the error in the response",JSON.stringify(response));
+    alert("User having an error in their code");
   }
   
+  window.gapi.load('client:auth2', () => {
+    window.gapi.client.init({
+        clientId: '345591705626-n5cpvj7i8cklkt9vv5j2gdd0519t47q7.apps.googleusercontent.com',
+        plugin_name: "chat"
+    })
+   })
 
 
   return (
@@ -76,11 +85,11 @@ function Login() {
                       <img
                         alt="..."
                         src={
-                          require("assets/img/icons/common/github.svg").default
+                          require("assets/img/icons/common/facebook.svg").default
                         }
                       />
                     </span>
-                    <span className="btn-inner--text">Github</span>
+                    <span className="btn-inner--text">Facebook</span>
                   </Button>
                   {/* <Button
                     className="btn-neutral btn-icon"
@@ -103,7 +112,7 @@ function Login() {
                     buttonText="Google"
                     onSuccess={responseSucsessGoogle}
                     onFailure={responseErrorGoogle}
-                    cookiePolicy={'single_host_origin'}
+                    // cookiePolicy={'single_host_origin'}
                   />
                 </div>
               </CardHeader>
