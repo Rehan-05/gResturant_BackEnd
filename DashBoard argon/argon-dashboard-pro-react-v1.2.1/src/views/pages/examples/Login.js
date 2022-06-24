@@ -130,6 +130,7 @@ function Login() {
     );
   }
 
+ 
   return (
     <>
       <AuthHeader
@@ -151,6 +152,14 @@ function Login() {
                     href="#pablo"
                     onClick={(e) => e.preventDefault()}
                   >
+                   {/* <FacebookLogin
+                        appId="1084307552514364"
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        scope="public_profile,user_friends"
+                        callback={responseFacebook}
+                        style={{width:1,height:1}}
+                         /> */}
                     <span className="btn-inner--icon mr-1">
                       <img
                         alt="..."
@@ -158,13 +167,6 @@ function Login() {
                           require("assets/img/icons/common/facebook.svg").default
                         }
                       />
-                       {/* <FacebookLogin
-                        appId="1084307552514364"
-                        autoLoad={true}
-                        fields="name,email,picture"
-                        scope="public_profile,user_friends"
-                        callback={responseFacebook}
-                        icon="fa-facebook" /> */}
                     </span>
                     <span className="btn-inner--text">Facebook</span>
                   </Button>
@@ -197,7 +199,22 @@ function Login() {
                 <div className="text-center text-muted mb-4">
                   <small>Or sign in with credentials</small>
                 </div>
-                <Form role="form">
+                <Form role="form" validate={values => {
+                      const errors = {};
+                    function validateEmail(email) {
+                      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                      return re.test(String(email).toLowerCase());
+                    }
+                    if (!values.email) {
+                      errors.email = "Required Email";
+                    } else if (!validateEmail(values.email)) {
+                      errors.email = "Not an valid email adress";
+                    }
+                    if (!values.password) {
+                      errors.password = "Required" ;
+                    }
+                    return errors;
+                  }}>
                   <FormGroup
                     className={classnames("mb-3", {
                       focused: focusedEmail,

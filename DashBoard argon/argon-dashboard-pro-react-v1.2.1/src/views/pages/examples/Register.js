@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React ,{useRef,useState} from "react";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -35,11 +35,41 @@ import {
 } from "reactstrap";
 // core components
 import AuthHeader from "components/Headers/AuthHeader.js";
+import Api from '../../../Api/api';
 
 function Register() {
-  const [focusedName, setfocusedName] = React.useState(false);
-  const [focusedEmail, setfocusedEmail] = React.useState(false);
-  const [focusedPassword, setfocusedPassword] = React.useState(false);
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const [names, setNames] = useState('');
+  const [emails, setEmails] = useState('');
+  const [passwords, setPasswords] = useState('');
+
+  const [focusedName, setfocusedName] = useState(false);
+  const [focusedEmail, setfocusedEmail] = useState(false);
+  const [focusedPassword, setfocusedPassword] = useState(false);
+
+  const OnRegisterUser = () => {
+    const data = {
+      name: names,
+      email: emails,
+      password: passwords,
+    }
+    console.log("dsdsdsddsdsd",data)
+    Api.SignUp(data)
+    .then(res => {
+      console.log(res);
+      alert('Register Success');
+    }
+    )
+    .catch(err => {
+      console.log("errrrrrrrrrrrrrrrorrrrrr",err);
+      alert('Register Failed');
+    }
+    )
+  }
+
   return (
     <>
       <AuthHeader
@@ -110,6 +140,11 @@ function Register() {
                         type="text"
                         onFocus={() => setfocusedName(true)}
                         onBlur={() => setfocusedName(false)}
+                        ref={name}
+                        value={names}
+                        onChange={(e) => {
+                        setNames(e.target.value);
+                        }}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -129,6 +164,11 @@ function Register() {
                         type="email"
                         onFocus={() => setfocusedEmail(true)}
                         onBlur={() => setfocusedEmail(false)}
+                        ref={email}
+                        value={emails}
+                        onChange={(e) => {
+                        setEmails(e.target.value);
+                        }}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -148,6 +188,11 @@ function Register() {
                         type="password"
                         onFocus={() => setfocusedPassword(true)}
                         onBlur={() => setfocusedPassword(false)}
+                        ref={password}
+                        value={passwords}
+                        onChange={(e) => {
+                        setPasswords(e.target.value);
+                        }}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -184,7 +229,7 @@ function Register() {
                       </div>
                     </Col>
                   </Row>
-                  <div className="text-center">
+                  <div className="text-center" onClick={()=>OnRegisterUser()}>
                     <Button className="mt-4" color="info" type="button">
                       Create account
                     </Button>
