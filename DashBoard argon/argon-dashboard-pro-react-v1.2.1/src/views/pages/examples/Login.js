@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React , {useRef} from "react";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -36,10 +36,16 @@ import {
 // core components
 import AuthHeader from "components/Headers/AuthHeader.js";
 import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 import { gapi } from "gapi-script";
 import axios  from "axios";
 
 function Login() {
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const [emailValuec,setEmailValue] = React.useState('');
+  const [passwordValuec,setPasswordValue] = React.useState('');
   const [focusedEmail, setfocusedEmail] = React.useState(false);
   const [focusedPassword, setfocusedPassword] = React.useState(false);
   
@@ -64,7 +70,7 @@ function Login() {
         console.log("Bad request",err);
       }
       else if(err.status === 404){
-        console.log("Not nice",err);
+        console.log("Not found",err);
       }else if(err.status === 403){
         console.log("Forbidden",err);
       }
@@ -84,6 +90,45 @@ function Login() {
     })
    })
 
+   const responseFacebook = (response) => {
+     console.log(response);
+  }
+
+  const OnLoginSubmit = () =>{
+    
+    var data = {
+      email: emailValuec,
+      password: passwordValuec,
+    };
+    console.log("values are here",data );
+
+    axios({
+      method: "POST",
+      url: "http://localhost:3003/api/auth/signin",
+      data: data,
+    }).then((res) => {
+      console.log("Login Data is shown here...",res);
+      alert("User successfully login");
+    }
+    ).catch((err) => {
+      console.log("here is the error", JSON.stringify(err));
+      // if(err.status === 401){
+      //   console.log("User not found",err);
+      // }
+      // else if(err.status === 500){  
+      //   console.log("Internal server error",err);
+      // }
+      // else if(err.status === 400){
+      //   console.log("Bad request",err);
+      // }
+      // else if(err.status === 404){
+      //   console.log("Not found",err);
+      // }else if(err.status === 403){
+      //   console.log("Forbidden",err);
+      // }
+    }
+    );
+  }
 
   return (
     <>
@@ -113,6 +158,13 @@ function Login() {
                           require("assets/img/icons/common/facebook.svg").default
                         }
                       />
+                       {/* <FacebookLogin
+                        appId="1084307552514364"
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        scope="public_profile,user_friends"
+                        callback={responseFacebook}
+                        icon="fa-facebook" /> */}
                     </span>
                     <span className="btn-inner--text">Facebook</span>
                   </Button>
@@ -162,6 +214,11 @@ function Login() {
                         type="email"
                         onFocus={() => setfocusedEmail(true)}
                         onBlur={() => setfocusedEmail(true)}
+                        ref={email}
+                        value={emailValuec}
+                        onChange={(e) => {
+                        setEmailValue(e.target.value);
+                        }}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -181,6 +238,11 @@ function Login() {
                         type="password"
                         onFocus={() => setfocusedPassword(true)}
                         onBlur={() => setfocusedPassword(true)}
+                        ref={password}
+                        value={passwordValuec}
+                        onChange={(e) => {
+                          setPasswordValue(e.target.value);
+                        }}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -198,7 +260,7 @@ function Login() {
                     </label>
                   </div>
                   <div className="text-center">
-                    <Button className="my-4" color="info" type="button">
+                    <Button className="my-4" color="info" type="button" onClick={()=>{OnLoginSubmit()}} >
                       Sign in
                     </Button>
                   </div>
