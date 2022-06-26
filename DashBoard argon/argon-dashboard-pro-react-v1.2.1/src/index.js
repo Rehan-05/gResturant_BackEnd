@@ -43,8 +43,8 @@ ReactDOM.render(
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route path="/rtl" render={(props) => <RTLLayout {...props} />} />
-      <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-      <Route path="/" render={(props) => <IndexView {...props} />} />
+      <Route path="/" render={(props) => <AuthLayout {...props} />} />
+      {/* <Route path="/" render={(props) => <IndexView {...props} />} /> */}
       <Redirect from="*" to="/" />
     </Switch>
   </BrowserRouter>,

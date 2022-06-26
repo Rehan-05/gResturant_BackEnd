@@ -64,13 +64,13 @@ function Auth() {
   return (
     <>
       <div className="main-content" ref={mainContentRef}>
-        <AuthNavbar />
+        {/* <AuthNavbar /> */}
         <Switch>
           {getRoutes(routes)}
           <Redirect from="*" to="/auth/login" />
         </Switch>
       </div>
-      <AuthFooter />
+      {/* <AuthFooter /> */}
     </>
   );
 }

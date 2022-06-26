@@ -74,7 +74,7 @@ function Register() {
     <>
       <AuthHeader
         title="Create an account"
-        lead="Use these awesome forms to login or create new account in your project for free."
+        // lead="Use these awesome forms to login or create new account in your project for free."
       />
       <Container className="mt--8 pb-5">
         <Row className="justify-content-center">

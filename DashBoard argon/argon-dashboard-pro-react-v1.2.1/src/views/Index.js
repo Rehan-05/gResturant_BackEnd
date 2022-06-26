@@ -36,9 +36,9 @@ import AuthFooter from "components/Footers/AuthFooter.js";
 function Index() {
   return (
     <>
-      <IndexNavbar />
+      {/* <IndexNavbar /> */}
       <div className="main-content">
-        <IndexHeader />
+        {/* <IndexHeader /> */}
         <section className="py-6 pb-9 bg-default">
           <Container fluid>
             <Row className="justify-content-center text-center">
@@ -520,7 +520,7 @@ function Index() {
           </Container>
         </section>
       </div>
-      <AuthFooter />
+      {/* <AuthFooter /> */}
     </>
   );
 }

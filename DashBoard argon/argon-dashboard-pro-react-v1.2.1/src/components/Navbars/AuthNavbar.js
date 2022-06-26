@@ -40,7 +40,7 @@ function AdminNavbar() {
         id="navbar-main"
       >
         <Container>
-          <NavbarBrand to="/" tag={Link}>
+          {/* <NavbarBrand to="/" tag={Link}>
             <img
               alt="..."
               src={require("assets/img/brand/argon-react-white.png").default}
@@ -57,7 +57,7 @@ function AdminNavbar() {
             type="button"
           >
             <span className="navbar-toggler-icon" />
-          </button>
+          </button> */}
           <UncontrolledCollapse
             className="navbar-custom-collapse"
             navbar
@@ -91,7 +91,7 @@ function AdminNavbar() {
               </Row>
             </div>
             <Nav className="mr-auto" navbar>
-              <NavItem>
+              {/* <NavItem>
                 <NavLink to="/admin/dashboard" tag={Link}>
                   <span className="nav-link-inner--text">Dashboard</span>
                 </NavLink>
@@ -100,9 +100,9 @@ function AdminNavbar() {
                 <NavLink to="/auth/pricing" tag={Link}>
                   <span className="nav-link-inner--text">Pricing</span>
                 </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/auth/login" tag={Link}>
+              </NavItem> */}
+              {/* <NavItem>
+                <NavLink to="/" tag={Link}>
                   <span className="nav-link-inner--text">Login</span>
                 </NavLink>
               </NavItem>
@@ -110,15 +110,15 @@ function AdminNavbar() {
                 <NavLink to="/auth/register" tag={Link}>
                   <span className="nav-link-inner--text">Register</span>
                 </NavLink>
-              </NavItem>
-              <NavItem>
+              </NavItem> */}
+              {/* <NavItem>
                 <NavLink to="/auth/lock" tag={Link}>
                   <span className="nav-link-inner--text">Lock</span>
                 </NavLink>
-              </NavItem>
+              </NavItem> */}
             </Nav>
-            <hr className="d-lg-none" />
-            <Nav className="align-items-lg-center ml-lg-auto" navbar>
+            {/* <hr className="d-lg-none" /> */}
+            {/* <Nav className="align-items-lg-center ml-lg-auto" navbar>
               <NavItem>
                 <NavLink
                   className="nav-link-icon"
@@ -194,7 +194,7 @@ function AdminNavbar() {
                   <span className="nav-link-inner--text">Purchase now</span>
                 </Button>
               </NavItem>
-            </Nav>
+            </Nav> */}
           </UncontrolledCollapse>
         </Container>
       </Navbar>

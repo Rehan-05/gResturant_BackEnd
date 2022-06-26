@@ -15,6 +15,7 @@
 
 */
 import React , {useRef} from "react";
+import { Link,Redirect } from "react-router-dom";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -45,7 +46,9 @@ function Login() {
   const password = useRef(null);
 
   const [emailValuec,setEmailValue] = React.useState('');
+  const [emailState,setEmailState] = React.useState(null);
   const [passwordValuec,setPasswordValue] = React.useState('');
+  const [passwordState,setPasswordState] = React.useState(null);
   const [focusedEmail, setfocusedEmail] = React.useState(false);
   const [focusedPassword, setfocusedPassword] = React.useState(false);
   
@@ -58,6 +61,7 @@ function Login() {
     }).then((res) => {
       console.log("Data successfully load on the google api",res);
       alert("User successfully login & added into DB");
+      <Redirect from="/" to="/dashboard" />
     }
     ).catch((err) => {
       if(err.status === 401){
@@ -109,8 +113,10 @@ function Login() {
     }).then((res) => {
       console.log("Login Data is shown here...",res);
       alert("User successfully login");
+      <Redirect from="/" to="/dashboard" />
     }
     ).catch((err) => {
+      <Redirect form="*" to="/admin/dashboard" />
       console.log("here is the error", JSON.stringify(err));
       // if(err.status === 401){
       //   console.log("User not found",err);
@@ -130,12 +136,28 @@ function Login() {
     );
   }
 
+  const validateCustomStylesForm = () => {
+    console.log("neweweweewewe", emailValuec);
+     console.log("neweweweewewe", passwordValuec);
+    if (emailValuec === ""  ) {
+      setEmailState("invalid");
+      console.log("invlaid is here")
+    } else {
+      setEmailState("valid");
+    }
+    if (passwordValuec === "" ) {
+      setPasswordState("invalid");
+    } else {
+      setPasswordState("valid");
+    }
+  };
+
  
   return (
     <>
       <AuthHeader
         title="Welcome!"
-        lead="Use these awesome forms to login or create new account in your project for free."
+        // lead="Use these awesome forms to login or create new account in your project for free."
       />
       <Container className="mt--8 pb-5">
         <Row className="justify-content-center">
@@ -199,28 +221,21 @@ function Login() {
                 <div className="text-center text-muted mb-4">
                   <small>Or sign in with credentials</small>
                 </div>
-                <Form role="form" validate={values => {
-                      const errors = {};
-                    function validateEmail(email) {
-                      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                      return re.test(String(email).toLowerCase());
-                    }
-                    if (!values.email) {
-                      errors.email = "Required Email";
-                    } else if (!validateEmail(values.email)) {
-                      errors.email = "Not an valid email adress";
-                    }
-                    if (!values.password) {
-                      errors.password = "Required" ;
-                    }
-                    return errors;
-                  }}>
+                <Form className="needs-validation" noValidate>
                   <FormGroup
                     className={classnames("mb-3", {
                       focused: focusedEmail,
                     })}
+                    
                   >
-                    <InputGroup className="input-group-merge input-group-alternative">
+                  <label
+                          className="form-control-label"
+                          htmlFor="validationCustom01"
+                        >
+                          Email
+                    </label>
+                    <InputGroup className="input-group-merge input-group-alternative" >
+                    
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
                           <i className="ni ni-email-83" />
@@ -229,12 +244,20 @@ function Login() {
                       <Input
                         placeholder="Email"
                         type="email"
+                        id="validationCustom01"
                         onFocus={() => setfocusedEmail(true)}
                         onBlur={() => setfocusedEmail(true)}
                         ref={email}
                         value={emailValuec}
+                        valid={emailState === "valid"}
+                        invalid={emailState === "invalid"}
                         onChange={(e) => {
                         setEmailValue(e.target.value);
+                        if (e.target.value === "") {
+                          setEmailState("invalid");
+                            } else {
+                              setEmailState("valid");
+                            }
                         }}
                       />
                     </InputGroup>
@@ -244,6 +267,12 @@ function Login() {
                       focused: focusedPassword,
                     })}
                   >
+                   <label
+                          className="form-control-label"
+                          htmlFor="validationCustom01"
+                        >
+                          Password
+                    </label>
                     <InputGroup className="input-group-merge input-group-alternative">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -253,12 +282,21 @@ function Login() {
                       <Input
                         placeholder="Password"
                         type="password"
+                        id="validationCustom02"
                         onFocus={() => setfocusedPassword(true)}
                         onBlur={() => setfocusedPassword(true)}
                         ref={password}
                         value={passwordValuec}
+                        valid={passwordState === "valid"}
+                        invalid={passwordState === "invalid"}
                         onChange={(e) => {
                           setPasswordValue(e.target.value);
+                          if (e.target.value === "") {
+                            setPasswordState("invalid");
+                            } else {
+                              setPasswordState("valid");
+                            }
+                          
                         }}
                       />
                     </InputGroup>
@@ -277,8 +315,13 @@ function Login() {
                     </label>
                   </div>
                   <div className="text-center">
-                    <Button className="my-4" color="info" type="button" onClick={()=>{OnLoginSubmit()}} >
-                      Sign in
+                    <Button className="my-4" color="info" type="button"
+                      onClick={()=>{ validateCustomStylesForm(); alert("Next Clicked")}} >
+                      {/* <Link to={"/admin/dashboard"}>
+                         Sign in
+                      </Link> */}
+                      Next
+                      
                     </Button>
                   </div>
                 </Form>
@@ -300,7 +343,12 @@ function Login() {
                   href="#pablo"
                   onClick={(e) => e.preventDefault()}
                 >
-                  <small>Create new account</small>
+                 <Link
+                    // style={{color:"white",cursorColor:"blue"}}
+                    to="/auth/register"
+                  >
+                   <small>Create new account</small>
+                  </Link>
                 </a>
               </Col>
             </Row>
