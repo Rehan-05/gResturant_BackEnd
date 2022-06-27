@@ -217,22 +217,22 @@ function Login() {
                   />
                 </div>
               </CardHeader>
-              <CardBody className="px-lg-5 py-lg-5">
+              <CardBody className="px-lg-5 py-lg-2">
                 <div className="text-center text-muted mb-4">
                   <small>Or sign in with credentials</small>
                 </div>
                 <Form className="needs-validation" noValidate>
                   <FormGroup
-                    className={classnames("mb-3", {
+                    className={classnames("mb-3 py-lg-2 ", {
                       focused: focusedEmail,
                     })}
                     
                   >
                   <label
-                          className="form-control-label"
-                          htmlFor="validationCustom01"
-                        >
-                          Email
+                     className="form-control-label"
+                     htmlFor="validationCustom01"
+                    >
+                      Email
                     </label>
                     <InputGroup className="input-group-merge input-group-alternative" >
                     
@@ -249,6 +249,7 @@ function Login() {
                         onBlur={() => setfocusedEmail(true)}
                         ref={email}
                         value={emailValuec}
+                        required
                         valid={emailState === "valid"}
                         invalid={emailState === "invalid"}
                         onChange={(e) => {
@@ -260,6 +261,7 @@ function Login() {
                             }
                         }}
                       />
+                      <div className="valid-feedback">Looks good!</div>
                     </InputGroup>
                   </FormGroup>
                   <FormGroup
@@ -286,6 +288,7 @@ function Login() {
                         onFocus={() => setfocusedPassword(true)}
                         onBlur={() => setfocusedPassword(true)}
                         ref={password}
+                        required
                         value={passwordValuec}
                         valid={passwordState === "valid"}
                         invalid={passwordState === "invalid"}
@@ -300,6 +303,9 @@ function Login() {
                         }}
                       />
                     </InputGroup>
+                    <div className="invalid-feedback">
+                          Please choose a username.
+                        </div>
                   </FormGroup>
                   <div className="custom-control custom-control-alternative custom-checkbox">
                     <input
