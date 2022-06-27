@@ -2,6 +2,7 @@ const config = require("../config/auth.config");
 const db = require("../model");
 const {User} = db.user;
 const {OAuth2Client} =  require("google-auth-library")
+// import fetch from 'node-fetch';
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -129,3 +130,56 @@ exports.googleSignIn = (req, res) => {
       console.log(err)
   })
 }
+
+
+//facebookSignIn Controller
+
+exports.facebookSignIn = (req, res) => {
+  const {tokenId, userID} = req.body;
+  
+  const  urlGraphFaceBook = `https://graph.facebook.com/v2.11/${userID}/fields?=id,name,email&access_token=${tokenId}`;
+  fetch(urlGraphFaceBook,{
+    method:"GET",
+  })
+  .then(response => response.json())
+  .then(data => {
+    const {email, name} = data;
+    User.findOne({email}).exec((err,user)=>{
+      if(err)
+      {
+        return res.status(400).json({
+          error:"something went wrong..."
+        })
+      }
+      else{
+        if(user)
+        {
+          var token = jwt.sign({ id: user.id }, config.secret);
+          const {_id,name,email} = user;
+          res.json({
+            token,
+            user:{_id,name,email}
+          })
+        }else{
+           let password = email+config.secret;
+           let newUser = new User({name,email,password});
+           newUser.save((err,data)=>{
+            if(err){
+              return res.status(400).json({
+                error: "Something went wrong"
+              })
+            }
+            var token = jwt.sign({ id: data.id }, config.secret);
+            const {_id,name,email} = newUser;
+            res.json({
+              token,
+              user:{_id,name,email}
+            })
+           })
+
+        }
+      }
+    })
+  })
+}
+

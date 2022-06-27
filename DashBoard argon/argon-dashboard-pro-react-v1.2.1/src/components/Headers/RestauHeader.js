@@ -24,15 +24,15 @@ import {
   Col,
 } from "reactstrap";
 
-function AlternativeHeader() {
+function RestauHeader() {
   return (
     <>
-      <div className="header pb-6">
+      <div className="header pb-6 ">
         <Container fluid>
           <div className="header-body">
             <Row className="align-items-center py-4">
               <Col lg="6" xs="7">
-                <h6 className="h2 d-inline-block mb-0">DashBoard</h6>{" "}
+                <h6 className="h2 d-inline-block mb-0">RESTAURANTS</h6>{" "}
                 <Breadcrumb
                   className="d-none d-md-inline-block ml-md-4"
                   listClassName="breadcrumb-links"
@@ -44,7 +44,7 @@ function AlternativeHeader() {
                   </BreadcrumbItem>
                   <BreadcrumbItem>
                     <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                      Dashboards
+                      ADD RESTAURANTS
                     </a>
                   </BreadcrumbItem>
                   {/* <BreadcrumbItem aria-current="page" className="active">
@@ -80,4 +80,4 @@ function AlternativeHeader() {
   );
 }
 
-export default AlternativeHeader;
+export default RestauHeader;

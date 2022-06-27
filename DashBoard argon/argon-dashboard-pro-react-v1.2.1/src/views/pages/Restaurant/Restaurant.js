@@ -35,13 +35,13 @@ import {
   Col,
 } from "reactstrap";
 // core components
-import AuthHeader from "components/Headers/AuthHeader.js";
+import RestauHeader from "components/Headers/RestauHeader.js";
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { gapi } from "gapi-script";
 import axios  from "axios";
 
-function Login() {
+function Restaurant() {
 
   const email = useRef(null);
   const password = useRef(null);
@@ -190,54 +190,18 @@ function Login() {
  
   return (
     <>
-      <AuthHeader
-        title="Welcome!"
-        // lead="Use these awesome forms to login or create new account in your project for free."
+      <RestauHeader
+        title="ADD RESTAURANT"
       />
-      <Container className="mt--8 pb-5">
+      <Container >
+      
         <Row className="justify-content-center">
-          <Col lg="5" md="7">
+        
+          <Col lg="9" md="10">
             <Card className="bg-secondary border-0 mb-0">
-              <CardHeader className="bg-transparent pb-5">
-                <div className="text-muted text-center mt-2 mb-3">
-                  <small>Sign in with</small>
-                </div>
-                <div className="btn-wrapper text-center">
-
-                  <FacebookLogin
-                        appId="1084307552514364"
-                        autoLoad={false}
-                        callback={responseFacebook}
-                        cssClass="btn-neutral btn-icon ml-2 mr-2 py-2 px-3 border border-white "
-                        color="default"
-                        icon={ <span className="btn-inner--icon mr-2">
-                                  <img
-                                    alt="..."
-                                    src={
-                                      require("assets/img/icons/common/facebook.svg").default
-                                    }
-                                  />
-                                </span>}
-                        textButton = { <span className="btn-inner--text text-primary">Facebook</span>}
-                         />
-
-                  <GoogleLogin
-                    clientId="345591705626-n5cpvj7i8cklkt9vv5j2gdd0519t47q7.apps.googleusercontent.com"
-                    // buttonText="Google"
-                    autoLoad={false}
-                    className="btn-neutral btn-icon ml-2 mr-2  px-2 border border-white "
-                    onSuccess={responseSucsessGoogle}
-                    onFailure={responseErrorGoogle}
-                    buttonText = { <span className="btn-inner--text text-primary">Google</span>}
-                    // cookiePolicy={'single_host_origin'}
-                  />
-
-                </div>
-              </CardHeader>
+             
               <CardBody className="px-lg-5 py-lg-2">
-                <div className="text-center text-muted mb-4">
-                  <small>Or sign in with credentials</small>
-                </div>
+                
                 <Form className="needs-validation" noValidate>
                   
                   <FormGroup
@@ -251,7 +215,7 @@ function Login() {
                      className="form-control-label"
                      htmlFor="validationCustom01"
                     >
-                      Email
+                      Restaurant Name
                     </label>
                     <InputGroup className="input-group-merge input-group-alternative" >
                     
@@ -261,7 +225,7 @@ function Login() {
                         </InputGroupText>
                       </InputGroupAddon>
                       <Input
-                        placeholder="Email"
+                        placeholder="Name"
                         type="email"
                         id="validationCustom01"
                         onFocus={() => setfocusedEmail(true)}
@@ -296,7 +260,51 @@ function Login() {
                           className="form-control-label"
                           htmlFor="validationCustom01"
                         >
-                          Password
+                          Restaurant Address
+                    </label>
+                    <InputGroup className="input-group-merge input-group-alternative">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="ni ni-lock-circle-open" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        placeholder="Address"
+                        type="password"
+                        id="validationCustom02"
+                        onFocus={() => setfocusedPassword(true)}
+                        onBlur={() => setfocusedPassword(true)}
+                        ref={password}
+                        required
+                        value={passwordValuec}
+                        valid={passwordState === "valid"}
+                        invalid={passwordState === "invalid"}
+                        onChange={(e) => {
+                          setPasswordValue(e.target.value);
+                          if (e.target.value === "" || e.target.value.length<6 || !mediumRegex.test(e.target.value)) {
+                              setPasswordState("invalid");
+                            } else {
+                              setPasswordState("valid");
+                            }
+                        }}
+                      />
+                       <div className="valid-feedback">Looks good!</div>
+                       <div className="invalid-feedback">
+                        Password invalid
+                     </div>
+                    </InputGroup>
+                  </FormGroup>
+                  <FormGroup
+                    className={classnames({
+                      focused: focusedPassword,
+                    })}
+                  >
+                   <label
+                          className="form-control-label"
+                          htmlFor="validationCustom01"
+                        >
+                          Restaurant Phone Number
+
                     </label>
                     <InputGroup className="input-group-merge input-group-alternative">
                       <InputGroupAddon addonType="prepend">
@@ -352,31 +360,7 @@ function Login() {
                 </Form>
               </CardBody>
             </Card>
-            <Row className="mt-3">
-              <Col xs="6">
-                <a
-                  className="text-light"
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <small>Forgot password?</small>
-                </a>
-              </Col>
-              <Col className="text-right" xs="6">
-                <a
-                  className="text-light"
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                 <Link
-                    // style={{color:"white",cursorColor:"blue"}}
-                    to="/auth/register"
-                  >
-                   <small>Create new account</small>
-                  </Link>
-                </a>
-              </Col>
-            </Row>
+           
           </Col>
         </Row>
       </Container>
@@ -384,4 +368,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Restaurant;

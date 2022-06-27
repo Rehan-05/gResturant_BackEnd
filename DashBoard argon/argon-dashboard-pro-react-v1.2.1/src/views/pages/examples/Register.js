@@ -37,6 +37,10 @@ import {
 // core components
 import AuthHeader from "components/Headers/AuthHeader.js";
 import Api from '../../../Api/api';
+import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
+import { gapi } from "gapi-script";
+import axios  from "axios";
 
 function Register() {
   const history = useHistory();
@@ -56,6 +60,53 @@ function Register() {
   const [focusedName, setfocusedName] = useState(false);
   const [focusedEmail, setfocusedEmail] = useState(false);
   const [focusedPassword, setfocusedPassword] = useState(false);
+
+  const responseSucsessGoogle = (response) => {
+    console.log("Data successfully load on the google api",response);
+    axios({
+      method: "POST",
+      url: "http://localhost:3003/api/auth/googleSignIn",
+      data: { tokenId:response.tokenId },
+    }).then((res) => {
+      console.log("Data successfully load on the google api",res);
+      alert("User successfully login & added into DB");
+      history.push("/admin/dashboard");
+    }
+    ).catch((err) => {
+      if(err.status === 401){
+        console.log("User not found",err);
+      }
+      else if(err.status === 500){  
+        console.log("Internal server error",err);
+      }
+      else if(err.status === 400){
+        console.log("Bad request",err);
+      }
+      else if(err.status === 404){
+        console.log("Not found",err);
+      }else if(err.status === 403){
+        console.log("Forbidden",err);
+      }
+    }
+    );
+  }
+
+  const responseErrorGoogle = (response) => {
+    console.log("Here is the error in the response",JSON.stringify(response));
+    alert("User having an error in their code");
+  }
+  
+  window.gapi.load('client:auth2', () => {
+    window.gapi.client.init({
+        clientId: '345591705626-n5cpvj7i8cklkt9vv5j2gdd0519t47q7.apps.googleusercontent.com',
+        plugin_name: "chat"
+    })
+   })
+
+   const responseFacebook = (response) => {
+     console.log(response);
+  }
+
 
   const OnRegisterUser = () => {
     const data = {
@@ -78,6 +129,7 @@ function Register() {
     )
   }
 
+  // window.navigator.vibrate(200);
 
   const validateEmail = (emails) => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -144,38 +196,37 @@ function Register() {
                   <small>Sign up with</small>
                 </div>
                 <div className="text-center">
-                  <Button
-                    className="btn-neutral btn-icon mr-4"
-                    color="default"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <span className="btn-inner--icon mr-1">
-                      <img
-                        alt="..."
-                        src={
-                          require("assets/img/icons/common/github.svg").default
-                        }
+                <div className="btn-wrapper text-center">
+
+                <FacebookLogin
+                      appId="1084307552514364"
+                      autoLoad={false}
+                      callback={responseFacebook}
+                      cssClass="btn-neutral btn-icon ml-2 mr-2 py-2 px-3 border border-white "
+                      color="default"
+                      icon={ <span className="btn-inner--icon mr-2">
+                                <img
+                                  alt="..."
+                                  src={
+                                    require("assets/img/icons/common/facebook.svg").default
+                                  }
+                                />
+                              </span>}
+                      textButton = { <span className="btn-inner--text text-primary">Facebook</span>}
                       />
-                    </span>
-                    <span className="btn-inner--text">Github</span>
-                  </Button>
-                  <Button
-                    className="btn-neutral btn-icon"
-                    color="default"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <span className="btn-inner--icon mr-1">
-                      <img
-                        alt="..."
-                        src={
-                          require("assets/img/icons/common/google.svg").default
-                        }
-                      />
-                    </span>
-                    <span className="btn-inner--text">Google</span>
-                  </Button>
+
+                <GoogleLogin
+                  clientId="345591705626-n5cpvj7i8cklkt9vv5j2gdd0519t47q7.apps.googleusercontent.com"
+                  // buttonText="Google"
+                  autoLoad={false}
+                  className="btn-neutral btn-icon ml-2 mr-2  px-2 border border-white "
+                  onSuccess={responseSucsessGoogle}
+                  onFailure={responseErrorGoogle}
+                  buttonText = { <span className="btn-inner--text text-primary">Google</span>}
+                  // cookiePolicy={'single_host_origin'}
+                />
+
+                </div>
                 </div>
               </CardHeader>
               <CardBody className="px-lg-5 py-lg-5">
