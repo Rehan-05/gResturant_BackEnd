@@ -15,7 +15,7 @@
 
 */
 import React , {useRef} from "react";
-import { Link,Redirect } from "react-router-dom";
+import { Link,Redirect,history, useHistory } from "react-router-dom";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -44,7 +44,7 @@ import axios  from "axios";
 function Login() {
   const email = useRef(null);
   const password = useRef(null);
-
+  const history = useHistory();
   const [emailValuec,setEmailValue] = React.useState('');
   const [emailState,setEmailState] = React.useState(null);
   const [passwordValuec,setPasswordValue] = React.useState('');
@@ -61,7 +61,7 @@ function Login() {
     }).then((res) => {
       console.log("Data successfully load on the google api",res);
       alert("User successfully login & added into DB");
-      <Redirect from="/" to="/dashboard" />
+      history.push("/admin/dashboard");
     }
     ).catch((err) => {
       if(err.status === 401){
@@ -113,44 +113,59 @@ function Login() {
     }).then((res) => {
       console.log("Login Data is shown here...",res);
       alert("User successfully login");
-      <Redirect from="/" to="/dashboard" />
+      history.push("/admin/dashboard");
     }
     ).catch((err) => {
       <Redirect form="*" to="/admin/dashboard" />
       console.log("here is the error", JSON.stringify(err));
-      // if(err.status === 401){
-      //   console.log("User not found",err);
-      // }
-      // else if(err.status === 500){  
-      //   console.log("Internal server error",err);
-      // }
-      // else if(err.status === 400){
-      //   console.log("Bad request",err);
-      // }
-      // else if(err.status === 404){
-      //   console.log("Not found",err);
-      // }else if(err.status === 403){
-      //   console.log("Forbidden",err);
-      // }
     }
     );
   }
 
+
+   const validateEmail = (emailValuec) => {
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(emailValuec).toLowerCase());
+  }
+
+  const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
   const validateCustomStylesForm = () => {
-    console.log("neweweweewewe", emailValuec);
-     console.log("neweweweewewe", passwordValuec);
-    if (emailValuec === ""  ) {
+    
+    if (emailValuec === "" || emailValuec.length<10) {
       setEmailState("invalid");
-      console.log("invlaid is here")
-    } else {
+    } else if (!validateEmail(emailValuec)) {
+      setEmailState("invalid");
+    } else  if (passwordValuec === "" || passwordValuec.length<6 || !mediumRegex.test(passwordValuec)){
+      setEmailState("invalid");
+    }
+    else {
       setEmailState("valid");
-    }
-    if (passwordValuec === "" ) {
-      setPasswordState("invalid");
-    } else {
       setPasswordState("valid");
-    }
+      
+      OnLoginSubmit();
+      alert("Validation successfully Applied");
+    } 
   };
+
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+      'use strict';
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation');
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms).forEach((form) => {
+        form.addEventListener('submit', (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
 
  
   return (
@@ -222,12 +237,14 @@ function Login() {
                   <small>Or sign in with credentials</small>
                 </div>
                 <Form className="needs-validation" noValidate>
+                  
                   <FormGroup
                     className={classnames("mb-3 py-lg-2 ", {
                       focused: focusedEmail,
                     })}
                     
                   >
+                  
                   <label
                      className="form-control-label"
                      htmlFor="validationCustom01"
@@ -254,15 +271,19 @@ function Login() {
                         invalid={emailState === "invalid"}
                         onChange={(e) => {
                         setEmailValue(e.target.value);
-                        if (e.target.value === "") {
+                        if (e.target.value === "" || e.target.value.length < 9 || validateEmail(e.target.value) === false) {
                           setEmailState("invalid");
                             } else {
                               setEmailState("valid");
                             }
                         }}
                       />
+                      
                       <div className="valid-feedback">Looks good!</div>
+                        <div className="invalid-feedback">Email invalid</div>
+                    
                     </InputGroup>
+                   
                   </FormGroup>
                   <FormGroup
                     className={classnames({
@@ -294,18 +315,18 @@ function Login() {
                         invalid={passwordState === "invalid"}
                         onChange={(e) => {
                           setPasswordValue(e.target.value);
-                          if (e.target.value === "") {
-                            setPasswordState("invalid");
+                          if (e.target.value === "" || e.target.value.length<6 || !mediumRegex.test(e.target.value)) {
+                              setPasswordState("invalid");
                             } else {
                               setPasswordState("valid");
                             }
-                          
                         }}
                       />
+                       <div className="valid-feedback">Looks good!</div>
+                       <div className="invalid-feedback">
+                        Password invalid
+                     </div>
                     </InputGroup>
-                    <div className="invalid-feedback">
-                          Please choose a username.
-                        </div>
                   </FormGroup>
                   <div className="custom-control custom-control-alternative custom-checkbox">
                     <input
@@ -322,12 +343,8 @@ function Login() {
                   </div>
                   <div className="text-center">
                     <Button className="my-4" color="info" type="button"
-                      onClick={()=>{ validateCustomStylesForm(); alert("Next Clicked")}} >
-                      {/* <Link to={"/admin/dashboard"}>
-                         Sign in
-                      </Link> */}
-                      Next
-                      
+                      onClick={()=>{ validateCustomStylesForm()}} >
+                        Sign in
                     </Button>
                   </div>
                 </Form>
