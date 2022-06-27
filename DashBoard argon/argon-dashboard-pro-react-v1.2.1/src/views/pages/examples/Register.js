@@ -15,6 +15,7 @@
 
 */
 import React ,{useRef,useState} from "react";
+import { Link,Redirect,history, useHistory } from "react-router-dom";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 // reactstrap components
@@ -38,6 +39,8 @@ import AuthHeader from "components/Headers/AuthHeader.js";
 import Api from '../../../Api/api';
 
 function Register() {
+  const history = useHistory();
+
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
@@ -45,6 +48,10 @@ function Register() {
   const [names, setNames] = useState('');
   const [emails, setEmails] = useState('');
   const [passwords, setPasswords] = useState('');
+  
+  const [nameState,setNameState] = React.useState(null);
+  const [emailState,setEmailState] = React.useState(null);
+  const [passwordState,setPasswordState] = React.useState(null);
 
   const [focusedName, setfocusedName] = useState(false);
   const [focusedEmail, setfocusedEmail] = useState(false);
@@ -61,6 +68,7 @@ function Register() {
     .then(res => {
       console.log(res);
       alert('Register Success');
+      history.push("/admin/dashboard");
     }
     )
     .catch(err => {
@@ -69,6 +77,57 @@ function Register() {
     }
     )
   }
+
+
+  const validateEmail = (emails) => {
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(emails).toLowerCase());
+  }
+
+  const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
+  const validateCustomStylesForm = () => {
+   
+    if(names === '' || emails.length <3 ){
+      setNameState('error');
+    }
+    else if (emails === "" || emails.length<10) {
+      setEmailState("invalid");
+    } else if (!validateEmail(emails)) {
+      setEmailState("invalid");
+    } else  if (passwords === "" || passwords.length<10 || !mediumRegex.test(passwords)){
+      setEmailState("invalid");
+    }
+    else {
+      setEmailState("valid");
+      setEmailState("valid");
+      setPasswordState("valid");
+      
+      // OnRegisterUser();
+      alert("Validation successfully Applied");
+      history.push("/admin/dashboard");
+    } 
+  };
+
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+      'use strict';
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation');
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms).forEach((form) => {
+        form.addEventListener('submit', (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+
 
   return (
     <>
@@ -123,7 +182,7 @@ function Register() {
                 <div className="text-center text-muted mb-4">
                   <small>Or sign up with credentials</small>
                 </div>
-                <Form role="form">
+                <Form className="needs-validation" noValidate>
                   <FormGroup
                     className={classnames({
                       focused: focusedName,
@@ -142,10 +201,20 @@ function Register() {
                         onBlur={() => setfocusedName(false)}
                         ref={name}
                         value={names}
+                        valid={nameState === "valid"}
+                        invalid={nameState === "invalid"}
                         onChange={(e) => {
                         setNames(e.target.value);
+                        if (e.target.value === "" || e.target.value.length < 3 ) {
+                             setNameState("invalid");
+                          } else {
+                              setNameState("valid");
+                            }
                         }}
                       />
+                       <div className="valid-feedback">Looks good!</div>
+                        <div className="invalid-feedback">Name invalid</div>
+                  
                     </InputGroup>
                   </FormGroup>
                   <FormGroup
@@ -166,10 +235,19 @@ function Register() {
                         onBlur={() => setfocusedEmail(false)}
                         ref={email}
                         value={emails}
+                        valid={emailState === "valid"}
+                        invalid={emailState === "invalid"}
                         onChange={(e) => {
                         setEmails(e.target.value);
+                        if (e.target.value === "" || e.target.value.length < 9 || validateEmail(e.target.value) === false) {
+                          setEmailState("invalid");
+                         } else {
+                              setEmailState("valid");
+                            }
                         }}
                       />
+                       <div className="valid-feedback">Looks good!</div>
+                        <div className="invalid-feedback">Email invalid</div>
                     </InputGroup>
                   </FormGroup>
                   <FormGroup
@@ -190,15 +268,24 @@ function Register() {
                         onBlur={() => setfocusedPassword(false)}
                         ref={password}
                         value={passwords}
+                        valid={passwordState === "valid"}
+                        invalid={passwordState === "invalid"}
                         onChange={(e) => {
                         setPasswords(e.target.value);
+                        if (e.target.value === "" || e.target.value.length<6 || !mediumRegex.test(e.target.value)) {
+                          setPasswordState("invalid");
+                         } else {
+                              setPasswordState("valid");
+                          }
                         }}
                       />
+                        <div className="valid-feedback">Looks good!</div>
+                        <div className="invalid-feedback">Password invalid</div>
                     </InputGroup>
                   </FormGroup>
                   <div className="text-muted font-italic">
                     <small>
-                      password strength:{" "}
+                      password strength:{" 9 "}
                       <span className="text-success font-weight-700">
                         strong
                       </span>
@@ -229,7 +316,7 @@ function Register() {
                       </div>
                     </Col>
                   </Row>
-                  <div className="text-center" onClick={()=>OnRegisterUser()}>
+                  <div className="text-center" onClick={()=>validateCustomStylesForm()}>
                     <Button className="mt-4" color="info" type="button">
                       Create account
                     </Button>
