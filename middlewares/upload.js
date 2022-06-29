@@ -3,7 +3,7 @@ const GridFsStorage = require('multer-gridfs-storage').GridFsStorage;
  
 
 const uri =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/ProjectVotcen";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/gResturant";
 
 const storage = new GridFsStorage({
   url: uri,

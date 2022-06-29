@@ -2,6 +2,7 @@ const { verifySignUp,authJwt,upload } = require("../middlewares");
 const controllerAuth = require("../controller/auth.controller");
 const controllerRestaurant = require("../controller/restaurant.controller");
 const controllerMenu = require("../controller/menu.controller");
+const { auth } = require("google-auth-library");
 module.exports = function(app) {
 
   app.use(function(req, res, next) {
@@ -21,7 +22,7 @@ module.exports = function(app) {
 
   // app.post("/api/auth/facebookSignIn",controllerAuth.facebookSignIn);
 
-  app.post("/api/addRestaurant",controllerRestaurant.addRestaurant);
+  app.post("/api/addRestaurant",[ authJwt.verifyToken, upload.single("file") ],controllerRestaurant.addRestaurant);
 
   app.get("/api/getRestaurants",controllerRestaurant.getRestaurants);
 
