@@ -8,6 +8,10 @@ var bodyParser = require('body-parser');
 var swaggerJsdoc = require("swagger-jsdoc");
 var swaggerUi = require("swagger-ui-express");
 var app = express();
+const multer = require("multer");
+const {
+  GridFsStorage
+} = require("multer-gridfs-storage");
 
 //Swagger setup 
 
@@ -59,12 +63,13 @@ const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/gResturant";
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-
-
 const Database = mongoose.connection;
 Database.on("error", console.error.bind(console, "connection error: "));
 Database.once("open", function () {
   console.log("Connected successfully");
+  gfs = new mongoose.mongo.GridFSBucket(Database, {
+    bucketName: "photos"
+  });
 });
 
 // view engine setup

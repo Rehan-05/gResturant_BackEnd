@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   // app.post("/api/auth/facebookSignIn",controllerAuth.facebookSignIn);
 
-  app.post("/api/addRestaurant",[ authJwt.verifyToken, upload.single("file") ],controllerRestaurant.addRestaurant);
+  app.post("/api/addRestaurant", upload.single("file") ,controllerRestaurant.addRestaurant);
 
   app.get("/api/getRestaurants",controllerRestaurant.getRestaurants);
 

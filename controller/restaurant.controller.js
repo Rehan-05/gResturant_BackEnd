@@ -5,27 +5,29 @@ const {Restaurant_Branch} = db.restaurant_Branch;
 // add restaurant controller
 
 exports.addRestaurant = async (req,res) => {
-    const image = req.file;
-    console.log("here is the file name",image)
+    const image = req.file.originalname;
+    console.log("sffasffdfsdfsddsfsdfsdf",req.file);
+
     const restaurant_brand = new Restaurant_Brand({
         Res_BrandName: req.body.Res_BrandName,
         Res_BrandLogo: image,
     });
     
-    await restaurant_brand.save((err,res) => {
-        if(err){
-            res.status(400).json({
-                status: "fail",
-                message: "Error in adding restaurant",
-              
-            });
+    await restaurant_brand.save((err, restaurant_brand) => {
+        if (err) {
+        res.status(500).send({ message: err,status:500 });
+        return;
         }
-        res.status(200).json({
-            status: "success",
-            message: "Restaurant added successfully",
-            data: res
+    
+        res.status(200).send({
+        id: restaurant_brand._id,
+        Res_BrandName: restaurant_brand.Res_BrandName,
+        Res_BrandLogo: restaurant_brand.Res_BrandLogo,
+        status: 200,
         });
+        return;
     }
+
     );
 
 

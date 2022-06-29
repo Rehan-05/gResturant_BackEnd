@@ -14,8 +14,7 @@ const RestaurantBrand_Schema=new mongoose.Schema({
   },
 
   Res_BrandLogo: {
-    data: Buffer, 
-    contentType: String 
+    type:String,
   },
 })
 
