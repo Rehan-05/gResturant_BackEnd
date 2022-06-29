@@ -28,15 +28,21 @@ module.exports = function(app) {
 
   app.delete("/api/deleteRestaurant/:id",controllerRestaurant.deleteRestaurants);
 
-  app.put("/api/updateRestaurant/:id",controllerRestaurant.updateRestaurants);
-  
-  app.post("/api/addMenu",controllerMenu.addMenu);
+  app.put("/api/updateRestaurant/:id",upload.single("file"),controllerRestaurant.updateRestaurants);
 
-  app.get("/api/getMenus",controllerMenu.getMenu);
+  app.post("/api/addRes_Branch/:brand_id",controllerRestaurant.addRes_Branch);
 
-  app.delete("/api/deleteMenu/:id",controllerMenu.deleteMenu);
+  app.get("/api/getRes_Branch/:brand_id",controllerRestaurant.getRes_Branch);
 
-  app.put("/api/putMenu/:id",controllerMenu.updateMenu);
+  app.delete("/api/deleteRes_Branch/:branch_id/:brand_id",controllerRestaurant.deleteRes_Branch);
+
+  app.post("/api/addMenu/:branch_id",upload.single("file"),controllerMenu.addMenu);
+
+  app.get("/api/getMenus/:branch_id",controllerMenu.getMenu);
+
+  app.delete("/api/deleteMenu/:branch_id",controllerMenu.deleteMenu);
+
+  app.put("/api/putMenu/:branch_id",controllerMenu.updateMenu);
 
 };
 

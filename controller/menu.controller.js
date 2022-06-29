@@ -1,14 +1,16 @@
 const db = require("../model");
 const { Menu } = require("../model/menu.model");
 
-
-exports.addMenu = async (req, res) => {
-    const menu = new Menu ({
-        DishName : req.body.DishName,
-        DishPrice : req.body.DishPrice,
-        DishDesc : req.body.DishDesc
+// controller for adding menu for a specific branch
+exports.addMenu = async (req,res) => { 
+     const images = req.file.originalname;
+    const menu = new Menu({
+        Res_BranchID: req.params.branch_id,
+        DishName: req.body.DishName,
+        DishPrice: req.body.DishPrice,
+        DishDesc: req.body.DishDesc,
+        DishImage : images
     });
-
     await menu.save((err, menu) => {
         if (err) {
         res.status(500).send({ message: err,status:500 });
@@ -17,9 +19,11 @@ exports.addMenu = async (req, res) => {
     
         res.status(200).send({
         id: menu._id,
+        Res_BranchID: menu.Res_BranchID,
         DishName: menu.DishName,
         DishPrice: menu.DishPrice,
         DishDesc: menu.DishDesc,
+        DishImage: menu.DishImage,
         status: 200,
         });
         return;
