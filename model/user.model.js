@@ -25,9 +25,8 @@ const UserSchema=new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    // minlength: [3, "Password must be at least 3 characters long"],
-    // maxlength: [50, "Password must be at most 50 characters long"],
   },
+  
 })
 
 const User = mongoose.model(

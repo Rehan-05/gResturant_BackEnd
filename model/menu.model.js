@@ -23,9 +23,12 @@ const MenuSchema=new mongoose.Schema({
     minlength: [3, "Phone number must be at least 10 characters long"],
     maxlength: [40, "Phone number must be at most 10 characters long"],
   },
-  DishImage: {
-    type: String,
-  }
+  DishImage: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 })
 
 const Menu = mongoose.model(

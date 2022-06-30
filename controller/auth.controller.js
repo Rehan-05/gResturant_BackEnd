@@ -7,6 +7,7 @@ const {OAuth2Client} =  require("google-auth-library")
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 const { response } = require("express");
+const { EXPIRATION_TIME_OFFSET } = require("google-auth-library/build/src/auth/baseexternalclient");
 // const crypto = require('crypto')
 // var sendResentEmail = require('../middlewares/sendResentEmail');
 // var send_NotificationEmail= require('../middlewares/send_NotificationEmail');
@@ -68,10 +69,9 @@ exports.signin = (req, res) => {
           user
         });
       }
+      
+      var token = jwt.sign({ id: user.id }, config.secret,{ expiresIn: 60});
 
-      var token = jwt.sign({ id: user.id }, config.secret);
-
-  
       res.status(200).send({
         id: user._id,
         email: user.email,

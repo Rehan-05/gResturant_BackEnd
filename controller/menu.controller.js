@@ -3,13 +3,15 @@ const { Menu } = require("../model/menu.model");
 
 // controller for adding menu for a specific branch
 exports.addMenu = async (req,res) => { 
-     const images = req.file.originalname;
-    const menu = new Menu({
+   
+     const imagesArray = req.files.map(file => file.originalname);
+     console.log("here is the file that we have to upload in the mongoDB",imagesArray);
+     const menu = new Menu({
         Res_BranchID: req.params.branch_id,
         DishName: req.body.DishName,
         DishPrice: req.body.DishPrice,
         DishDesc: req.body.DishDesc,
-        DishImage : images
+        DishImage : imagesArray
     });
     await menu.save((err, menu) => {
         if (err) {
@@ -30,45 +32,50 @@ exports.addMenu = async (req,res) => {
     });
 }
 
-exports.getMenu = async (req,res) => {
-    const menu = await Menu.find();
-    res.status(200).json({
-        status: "success",
-        message: "All Menu",
-        data: menu
-      });
-}
+    // Get all the menu for a specific branch
+    exports.getMenu = async (req,res) => {
+        const menu = await Menu.find({Res_BranchID: req.params.branch_id});
+        res.status(200).json({
+            status: "success",
+            message: "All Menu",
+            data: menu
+            });
+    }
 
-exports.deleteMenu = async (req,res) =>{
-    const menu = await Menu.findByIdAndDelete(req.params.id);
-    if(!menu){
-        res.status(404).json({
-            status: "fail",
-            message: "Menu not found"
+   //Delete the dish on a specific id and branch id
+    exports.deleteMenu = async (req,res) => {
+        const menu = await Menu.findOneAndDelete({_id: req.params.dish_id,Res_BranchID: req.params.branch_id});
+        if(!menu){
+            res.status(404).json({
+                status: "fail",
+                message: "Dish in this specific menu not found"
+            });
+        }
+        res.status(200).json({
+            status: "success",
+            message: "Dish deleted successfully",
+            data: menu
         });
     }
-    res.status(200).json({
-        status: "success",
-        message: "Menu deleted successfully",
-        data: menu
-    });
-}
 
-exports.updateMenu = async (req,res) => {
-    const menu = await Menu.findByIdAndUpdate(req.params.id, {
-        DishName: req.body.DishName,
-        DishPrice: req.body.DishPrice,
-        DishDesc: req.body.DishDesc
-    });
-    if(!menu){
-        res.status(404).json({
-            status: "fail",
-            message: "Menu not found"
+  // Update the menu dish on a specific id and branch id
+    exports.updateMenu = async (req,res) => {
+        const imagesArray = req.files.map(file => file.originalname);
+        const menu = await Menu.findOneAndUpdate({_id: req.params.dish_id,Res_BranchID: req.params.branch_id},{
+            DishName: req.body.DishName,
+            DishPrice: req.body.DishPrice,
+            DishDesc: req.body.DishDesc,
+            DishImage: imagesArray
+        });
+        if(!menu){
+            res.status(404).json({
+                status: "fail",
+                message: "Dish in this specific menu not found"
+            });
+        }
+        res.status(200).json({
+            status: "success",
+            message: "Dish updated successfully",
+            data: menu
         });
     }
-    res.status(200).json({
-        status: "success",
-        message: "Menu updated successfully",
-        data: menu
-    });
-}

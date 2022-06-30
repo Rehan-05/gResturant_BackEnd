@@ -22,27 +22,27 @@ module.exports = function(app) {
 
   // app.post("/api/auth/facebookSignIn",controllerAuth.facebookSignIn);
 
-  app.post("/api/addRestaurant", upload.single("file") ,controllerRestaurant.addRestaurant);
+  app.post("/api/addRestaurant", [upload.single("file"),authJwt.verifyToken] ,controllerRestaurant.addRestaurant);
 
-  app.get("/api/getRestaurants",controllerRestaurant.getRestaurants);
+  app.get("/api/getRestaurants",authJwt.verifyToken,controllerRestaurant.getRestaurants);
 
-  app.delete("/api/deleteRestaurant/:id",controllerRestaurant.deleteRestaurants);
+  app.delete("/api/deleteRestaurant/:id",authJwt.verifyToken,controllerRestaurant.deleteRestaurants);
 
-  app.put("/api/updateRestaurant/:id",upload.single("file"),controllerRestaurant.updateRestaurants);
+  app.put("/api/updateRestaurant/:id",[upload.single("file"),authJwt.verifyToken],controllerRestaurant.updateRestaurants);
 
-  app.post("/api/addRes_Branch/:brand_id",controllerRestaurant.addRes_Branch);
+  app.post("/api/addRes_Branch/:brand_id",authJwt.verifyToken,controllerRestaurant.addRes_Branch);
 
-  app.get("/api/getRes_Branch/:brand_id",controllerRestaurant.getRes_Branch);
+  app.get("/api/getRes_Branch/:brand_id",authJwt.verifyToken,controllerRestaurant.getRes_Branch);
 
-  app.delete("/api/deleteRes_Branch/:branch_id/:brand_id",controllerRestaurant.deleteRes_Branch);
+  app.delete("/api/deleteRes_Branch/:branch_id/:brand_id",authJwt.verifyToken,controllerRestaurant.deleteRes_Branch);
 
-  app.post("/api/addMenu/:branch_id",upload.single("file"),controllerMenu.addMenu);
+  app.post("/api/addMenu/:branch_id",[upload.array('file', 12),authJwt.verifyToken],controllerMenu.addMenu);
 
-  app.get("/api/getMenus/:branch_id",controllerMenu.getMenu);
+  app.get("/api/getMenus/:branch_id",authJwt.verifyToken,controllerMenu.getMenu);
 
-  app.delete("/api/deleteMenu/:branch_id",controllerMenu.deleteMenu);
+  app.delete("/api/deleteMenu/:dish_id/:branch_id",authJwt.verifyToken,controllerMenu.deleteMenu);
 
-  app.put("/api/putMenu/:branch_id",controllerMenu.updateMenu);
+  app.put("/api/putMenu/:dish_id/:branch_id",[upload.array('file', 12),authJwt.verifyToken],controllerMenu.updateMenu);
 
 };
 
