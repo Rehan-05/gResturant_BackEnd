@@ -27,7 +27,7 @@ import {
 function RestauHeader() {
   return (
     <>
-      <div className="header pb-6 ">
+      <div className="header pb-4 ">
         <Container fluid>
           <div className="header-body">
             <Row className="align-items-center py-4">
@@ -39,11 +39,12 @@ function RestauHeader() {
                 >
                   <BreadcrumbItem>
                     <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                      <i className="fas fa-home" />
+                      <i className="ni ni-shop text-success" />
+                      
                     </a>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <a href="#pablo" onClick={(e) => e.preventDefault()} className="text-success">
                       ADD RESTAURANTS
                     </a>
                   </BreadcrumbItem>

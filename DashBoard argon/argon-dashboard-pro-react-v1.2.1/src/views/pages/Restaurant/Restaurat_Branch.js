@@ -38,7 +38,7 @@ import {
 import RestauHeader from "components/Headers/RestauHeader.js";
 import axios  from "axios";
 
-  function Restaurant() {
+  function Restaurant_Branch() {
 
   const [dataModel, setDataModel] = React.useState(Restaurant_Data);
   
@@ -105,11 +105,9 @@ import axios  from "axios";
                   <FormGroup
                     className={classnames("mb-3 py-lg-2 ", {
                       focused: focusedName,
-                    })}
-                    
-                  >
+                    })} >
                   <div>
-                        <label for="formFileMultiple" class="form-label"> Restaurant Name</label>
+                        <label for="formFileMultiple" class="form-label">Res Branch Name</label>
                         <input 
                           // class="form-control" 
                           placeholder="Restaurant Name"
@@ -125,19 +123,77 @@ import axios  from "axios";
                     </div>
                   </FormGroup>
 
-                  <FormGroup className={classnames({ focused: focusedfile, })} >
-                  <div class="form-floating ">
-                    <label for="formFile" class="form-label">Restaurant Logo</label>
-                    <input 
-                    class="form-control" 
-                    type="file" 
-                    id="formFile" 
-                    onChange={onfileOnChange}
-                    onFocus={() => setfocusedFile(true)}
-                    onBlur={() => setfocusedFile(false)}
-                    />
-                </div>
+                  <FormGroup
+                    className={classnames("mb-3 py-lg-2 ", {
+                      focused: focusedName,
+                    })}
+                  >
+                  <div>
+                        <label for="formFileMultiple" class="form-label">Res Branch Address</label>
+                        <input 
+                          // class="form-control" 
+                          placeholder="Restaurant Name"
+                          onChange={onNameChangeHandle}
+                          class="form-control is-invalid"
+                          defaultValue={dataModel.Res_BrandName}
+                          onFocus={() => setfocusedName(true)}
+                          onBlur={() => setfocusedName(false)}
+                          type="text" 
+                          id="formFileMultiple" 
+                          style={{zIndex:100}}
+                        />
+                    </div>
                   </FormGroup>
+
+
+
+                  <FormGroup
+                    className={classnames("mb-3 py-lg-2 ", {
+                      focused: focusedName,
+                    })}
+                    
+                  >
+                  <div>
+                        <label for="formFileMultiple" class="form-label">Starting Time</label>
+                        <input 
+                          // class="form-control" 
+                          placeholder="Restaurant Name"
+                          onChange={onNameChangeHandle}
+                          class="form-control is-invalid"
+                          defaultValue={dataModel.Res_BrandName}
+                          onFocus={() => setfocusedName(true)}
+                          onBlur={() => setfocusedName(false)}
+                          type="text" 
+                          id="formFileMultiple" 
+                          style={{zIndex:100}}
+                        />
+                    </div>
+                  </FormGroup>
+
+                  <FormGroup
+                    className={classnames("mb-3 py-lg-2 ", {
+                      focused: focusedName,
+                    })}
+                    
+                  >
+                  <div>
+                        <label for="formFileMultiple" class="form-label">Ending Time</label>
+                        <input 
+                          // class="form-control" 
+                          placeholder="Restaurant Name"
+                          onChange={onNameChangeHandle}
+                          class="form-control is-invalid"
+                          defaultValue={dataModel.Res_BrandName}
+                          onFocus={() => setfocusedName(true)}
+                          onBlur={() => setfocusedName(false)}
+                          type="text" 
+                          id="formFileMultiple" 
+                          style={{zIndex:100}}
+                        />
+                    </div>
+                  </FormGroup>
+
+                  
                 
                   <div className="text-center">
                     <Button className="my-4" color="info" type="button"
@@ -156,4 +212,4 @@ import axios  from "axios";
   );
 }
 
-export default Restaurant;
+export default Restaurant_Branch;

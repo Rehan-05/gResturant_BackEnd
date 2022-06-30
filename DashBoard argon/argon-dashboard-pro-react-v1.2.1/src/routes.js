@@ -16,6 +16,8 @@
 */
 import Dashboard from "views/pages/dashboards/Alternative.js";
 import Restaurant from "views/pages/Restaurant/Restaurant.js";
+import Restaurant_Branch from "views/pages/Restaurant/Restaurat_Branch.js";
+import Restaurant_Menu from "views/pages/menu/menu.js";
 // import Buttons from "views/pages/components/Buttons.js";
 // import Calendar from "views/pages/Calendar.js";
 // import Cards from "views/pages/components/Cards.js";
@@ -47,17 +49,34 @@ const routes = [
   {
     path: "/DashBoard",
     name: "Dashboard",
-    icon: "ni ni-shop text-primary",
+    // icon: "ni ni-shop text-primary",
+    icon:"fas fa-home text-primary",
     component: Dashboard,
     layout: "/admin",
+    
   },
   {
     path: "/Restaurant",
     name: "Restaurant",
-    icon: "ni ni-circle-08 text-success",
+    icon: "ni ni-shop text-success",
     component: Restaurant,
     layout: "/admin",
   },
+  {
+    path: "/Restaurant_Branch",
+    name: "Res Branches",
+    icon: "ni ni-shop text-success",
+    component: Restaurant_Branch,
+    layout: "/admin",
+  },
+  {
+    path: "/Restaurant_Menu",
+    name: "Restaurant Menu",
+    icon: "ni ni-shop text-success",
+    component: Restaurant_Menu,
+    layout: "/admin",
+  },
+  
   {
     path: "/login",
     name: "Login",
