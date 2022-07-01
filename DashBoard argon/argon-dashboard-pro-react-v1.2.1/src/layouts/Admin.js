@@ -16,13 +16,15 @@
 */
 import React from "react";
 // react library for routing
-import { useLocation, Route, Switch, Redirect } from "react-router-dom";
+import { useLocation, Route, Switch, Redirect,useHistory } from "react-router-dom";
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
+import { useSelector } from "react-redux";
+
 
 function Admin() {
   const [sidenavOpen, setSidenavOpen] = React.useState(true);
@@ -76,6 +78,17 @@ function Admin() {
       : "light";
   };
 
+  const user = useSelector(({ LoginUser }) => LoginUser.auth);
+  const history = useHistory()
+  React.useEffect(() => {
+    debugger
+    if(!user)
+    {
+      
+      history.replace("/");
+    }
+  }, [user])
+  
   return (
     <>
       <Sidebar
@@ -97,7 +110,7 @@ function Admin() {
         />
         <Switch>
           {getRoutes(routes)}
-          <Redirect from="*" to="/admin/dashboard" />
+          <Redirect from="/admin" to="/admin/dashboard" />
         </Switch>
         {/* <AdminFooter /> */}
       </div>

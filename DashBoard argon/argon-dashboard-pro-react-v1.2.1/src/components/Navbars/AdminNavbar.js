@@ -18,6 +18,8 @@
 import classnames from "classnames";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { logout } from "../../views/Redux/Actions/auth.action.js";
 // reactstrap components
 import {
   Collapse,
@@ -44,6 +46,8 @@ import {
 } from "reactstrap";
 
 function AdminNavbar({ theme, sidenavOpen, toggleSidenav }) {
+
+  const dispatch = useDispatch();
   // function that on mobile devices makes the search open
   const openSearch = () => {
     document.body.classList.add("g-navbar-search-showing");
@@ -439,8 +443,7 @@ function AdminNavbar({ theme, sidenavOpen, toggleSidenav }) {
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={(e) => { dispatch(logout()) }}
                   >
                     <i className="ni ni-user-run" />
                     <span>Logout</span>

@@ -154,10 +154,8 @@ function Register() {
       setEmailState("valid");
       setEmailState("valid");
       setPasswordState("valid");
-      
-      // OnRegisterUser();
+      OnRegisterUser();
       alert("Validation successfully Applied");
-      history.push("/admin/dashboard");
     } 
   };
 

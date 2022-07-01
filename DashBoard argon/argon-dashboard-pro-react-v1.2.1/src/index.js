@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 // react library for routing
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
@@ -36,17 +36,71 @@ import "assets/scss/argon-dashboard-pro-react.scss?v1.2.0";
 import AdminLayout from "layouts/Admin.js";
 import RTLLayout from "layouts/RTL.js";
 import AuthLayout from "layouts/Auth.js";
-import IndexView from "views/Index.js";
+// import IndexView from "views/Index.js";
+import {Provider} from 'react-redux';
+import ConfigureStore from './views/Redux/store';
+import {useSelector} from "react-redux"
+import {useHistory} from "react-router-dom"
 
-ReactDOM.render(
+const store = ConfigureStore();
+function AuthRoute({ children, ...rest }) {
+  debugger
+  const user = useSelector(({ LoginUser }) => LoginUser?.auth);
+  const onlyChild = React.Children.only(children);
+
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        user ? (
+          React.cloneElement(onlyChild, { ...rest, ...props })
+        ) : (
+          <Redirect to="/" />
+        )
+      }
+    />
+  );
+}
+function PrivateRoute({ children, ...rest }) {
+  const user = useSelector(({ LoginUser }) => LoginUser.auth);
+  // const history = useHistory();
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+    }
+  }, [user]);
+  return (
+    <>
+    
+    </>
+  );
+}
+const App = () => {
+  return(
+   
   <BrowserRouter>
     <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Route path="/rtl" render={(props) => <RTLLayout {...props} />} />
-      <Route path="/" render={(props) => <AuthLayout {...props} />} />
+    <AuthRoute path="/admin">
+        <AdminLayout />
+      </AuthRoute>
+      <Route path="/rtl"  >
+      <RTLLayout />
+      </Route>
+      <Route  path={"/"} >
+      <AuthLayout  />
+      </Route>
       {/* <Route path="/" render={(props) => <IndexView {...props} />} /> */}
-      <Redirect from="*" to="/" />
+      <Redirect from="/" to="/" />  
     </Switch>
-  </BrowserRouter>,
+  </BrowserRouter>
+  
+  )
+}
+
+ReactDOM.render(
+  // <React.StrictMode>
+  <Provider store={store}>
+  <App />
+  </Provider>,
   document.getElementById("root")
 );

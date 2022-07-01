@@ -8,10 +8,10 @@ class ApiContainerClass {
 
   Restaurant_Add = (data, token) => {
     const header = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       Authorization: 'Bearer ' + token,
     };
-    return http.post(`/api/addRestaurant`, data, { headers: header });
+    return http.post(`/addRestaurant`, data, { headers: header });
     // return http.post(`/Members/get/${company}`, { headers: header });
   }
 

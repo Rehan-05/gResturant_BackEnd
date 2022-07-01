@@ -34,12 +34,13 @@ import {
   Row,
   Col,
 } from "reactstrap";
-// core components
 import RestauHeader from "components/Headers/RestauHeader.js";
-import axios  from "axios";
+import { useSelector } from "react-redux";  
 
   function Restaurant() {
 
+  const user = useSelector(({ LoginUser }) => LoginUser.auth);
+  console.log("jflksdjfkdsflksdjflksj",user.accessToken)
   const [dataModel, setDataModel] = React.useState(Restaurant_Data);
   
   const [focusedName, setfocusedName] = React.useState(false);
@@ -53,39 +54,32 @@ import axios  from "axios";
     setDataModel({ ...dataModel, file:event.target.files[0],fileName:event.target.files[0].name });
   };
 
+  const add_Restaurant = () => {
 
+    // debugger
+    // if(dataModel.Res_BrandName.length  == 0){
+    //   console.log("name is empty");
+    //   return;
+    // }else if(dataModel.file.length == 0){
+    //   console.log("name is empty");
+    //   return;
+    // }
 
-  // const add_Restaurant = () => {
+    var data = new FormData();
+    data.append('Res_BrandName', dataModel.Res_BrandName);
+    data.append("file", dataModel.file);
 
-  //   debugger
-  //   if(dataModel.Res_BrandName.length==0){
-  //     console.log("name is empty");
-  //     return;
-  //   }else if(dataModel.file.length==0){
-  //     console.log("name is empty");
-  //     return;
-  //   }
+    Api.Restaurant_Add( data ,  user.accessToken ).then((res)=>{
+      
+      console.log("requirement for the specific module is here",res)
+      setDataModel(Restaurant_Data);
+      alert("Restaurant added successfully");
+    }).catch((err)=>{
+      console.log("name is empty", err);
+    })
 
-  //   var data = new FormData();
-  //   data.append('name', dataModel.name);
-  //   data.append("file", dataModel.file);
+  }
 
-  //   Api.addRestaurant( data ,   accessToken ).then((res)=>{
-  //     debugger
-  //     console.log("requirement for the specific module is here",res)
-  //     if(res.status==200){
-  //       setDataModel(Restaurant_Data);
-  //       console.log("name is empty");
-  //     }else{
-  //       console.log("name is empty");
-  //     }
-  //   }).catch((err)=>{
-  //     console.log("name is empty");
-  //   })
-
-  // }
-
- 
   return (
     <>
       <RestauHeader
@@ -114,7 +108,7 @@ import axios  from "axios";
                           // class="form-control" 
                           placeholder="Restaurant Name"
                           onChange={onNameChangeHandle}
-                          class="form-control is-invalid"
+                          class="form-control"
                           defaultValue={dataModel.Res_BrandName}
                           onFocus={() => setfocusedName(true)}
                           onBlur={() => setfocusedName(false)}
@@ -141,7 +135,7 @@ import axios  from "axios";
                 
                   <div className="text-center">
                     <Button className="my-4" color="info" type="button"
-                      onClick={()=>{ }} >
+                      onClick={()=>{ add_Restaurant() }} >
                         Add Restaurant
                     </Button>
                   </div>

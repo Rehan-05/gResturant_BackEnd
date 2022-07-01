@@ -14,7 +14,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React , {useRef} from "react";
+import React , {useRef,useEffect} from "react";
 import { Link,Redirect,history, useHistory } from "react-router-dom";
 // nodejs library that concatenates classes
 import classnames from "classnames";
@@ -40,9 +40,14 @@ import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { gapi } from "gapi-script";
 import axios  from "axios";
+import { useDispatch, useSelector } from "react-redux"; 
+import { LoginAuth} from '../../Redux/Actions/auth.action'
 
 function Login() {
-
+ 
+  const user = useSelector(({ LoginUser }) => LoginUser?.auth);
+  
+  const dispatch = useDispatch();
   const email = useRef(null);
   const password = useRef(null);
 
@@ -56,6 +61,16 @@ function Login() {
   
   const [focusedEmail, setfocusedEmail] = React.useState(false);
   const [focusedPassword, setfocusedPassword] = React.useState(false);
+
+
+  useEffect(() => {
+
+    if(user)
+    {
+      history.push("/admin")
+    }
+  }, [user])
+  
   
   const responseSucsessGoogle = (response) => {
     console.log("Data successfully load on the google api",response);
@@ -125,19 +140,35 @@ function Login() {
       password: passwordValuec,
     };
     console.log("values are here",data );
-
+   
     axios({
       method: "POST",
       url: "http://localhost:3003/api/auth/signin",
+      headers: { 
+        'Content-Type': 'application/json'
+      },
       data: data,
     }).then((res) => {
+     debugger
       console.log("Login Data is shown here...",res);
-      alert("User successfully login");
-      history.push("/admin/dashboard");
+      dispatch(LoginAuth(res.data));
+      localStorage.setItem("User_Login", JSON.stringify(res.data));
     }
     ).catch((err) => {
-     // history.push("/admin/dashboard");
-      console.log("here is the error", JSON.stringify(err));
+      if(err.status === 401){
+        console.log("User not found",err);
+        alert('Register Failed');
+      }
+      else if(err.status === 500){
+        console.log("Internal server error",err);
+        alert('Register Failed');
+      } else if(err.status === 400){
+        console.log("Bad request",err);
+      } else if(err.status === 404){
+        console.log("Not found",err);
+      } else if(err.status === 403){
+        console.log("Forbidden",err);
+      } 
     }
     );
   }
@@ -162,9 +193,7 @@ function Login() {
     else {
       setEmailState("valid");
       setPasswordState("valid");
-      history.push("/admin/dashboard");
-      // OnLoginSubmit();
-      alert("Validation successfully Applied");
+      OnLoginSubmit();
     } 
   };
 

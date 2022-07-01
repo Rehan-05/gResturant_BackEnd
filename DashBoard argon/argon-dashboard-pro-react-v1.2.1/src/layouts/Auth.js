@@ -67,7 +67,7 @@ function Auth() {
         {/* <AuthNavbar /> */}
         <Switch>
           {getRoutes(routes)}
-          <Redirect from="*" to="/auth/login" />
+          <Redirect from="/" to="/auth/login" />
         </Switch>
       </div>
       {/* <AuthFooter /> */}
