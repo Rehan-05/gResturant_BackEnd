@@ -36,6 +36,7 @@ import {
 } from "reactstrap";
 import RestauHeader from "components/Headers/RestauHeader.js";
 import { useSelector } from "react-redux";  
+import TableData from "./TableData";
 
   function Restaurant() {
 
@@ -45,6 +46,8 @@ import { useSelector } from "react-redux";
   
   const [focusedName, setfocusedName] = React.useState(false);
   const [focusedfile, setfocusedFile] = React.useState(false);
+
+  const [restaurant, setRestaurant] = React.useState([]);
 
   const onNameChangeHandle = (event) => {
     setDataModel({ ...dataModel, Res_BrandName: event.target.value });
@@ -77,8 +80,21 @@ import { useSelector } from "react-redux";
     }).catch((err)=>{
       console.log("name is empty", err);
     })
-
   }
+
+ const Get_Restaurant  = async() =>{
+  Api.Get_Restaurant( user.accessToken ).then((res)=>{
+    console.log("requirement for the specific module is here",res);
+    setRestaurant(res.data);
+  }).catch((err)=>{
+    console.log("name is empty", err);
+  })
+ }
+
+  React.useEffect(() => {
+    Get_Restaurant();
+  }, [restaurant]);
+
 
   return (
     <>
@@ -87,9 +103,9 @@ import { useSelector } from "react-redux";
       />
       <Container >
       
-        <Row className="justify-content-center">
+        <Row className="justify-content-center " style={{marginBottom:50}}>
         
-          <Col lg="9" md="10">
+          <Col lg="19" md="10">
             <Card className="bg-secondary border-1 mb-0">
              
               <CardBody className="px-lg-5 py-lg-2">
@@ -134,9 +150,9 @@ import { useSelector } from "react-redux";
                   </FormGroup>
                 
                   <div className="text-center">
-                    <Button className="my-4" color="info" type="button"
+                    <Button className="my-4" color="default" type="button"
                       onClick={()=>{ add_Restaurant() }} >
-                        Add Restaurant
+                        ADD RESTAURANT
                     </Button>
                   </div>
                 </Form>
@@ -144,6 +160,9 @@ import { useSelector } from "react-redux";
             </Card>
            
           </Col>
+        </Row>
+        <Row className="justify-content-center mt-1">
+        <TableData />
         </Row>
       </Container>
     </>

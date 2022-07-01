@@ -18,7 +18,7 @@ export const LoginUserReducer= (state = Get_LocalStorage_User(),{type,payload}) 
        case ActionTypes.LOGIN_USER:
            return {...state, auth: payload};
        case ActionTypes.LOGOUT_USER:
-              return null;
+              return {...state,auth:null};
        default:
            return state;
    }
